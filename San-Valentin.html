@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego San Valentín</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #a0c4ff; /* Azul clarito */
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+    }
+    h2 {
+      color: #D12D6E;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .question {
+      font-size: 20px;
+      margin: 20px 0;
+    }
+    .btn {
+      background-color: #D12D6E;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      margin: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background-color: #b7265d;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .message-container {
+      display: none;
+      margin-top: 20px;
+      font-size: 24px;
+      color: #D12D6E;
+      font-weight: bold;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 id="welcome-message">¡Estás lista, Laura!? 💖</h2>
+
+    <!-- Botón para iniciar el juego -->
+    <div id="start-container">
+      <button class="btn" onclick="startGame()">Sí, ¡estoy lista!</button>
+    </div>
+
+    <div id="quiz" style="display: none;">
+      <div id="question-container" class="question">
+        <!-- Pregunta y opciones se cargarán aquí -->
+      </div>
+      <div id="options-container">
+        <!-- Opciones de respuesta se cargarán aquí -->
+      </div>
+    </div>
+
+    <div id="result" class="result" style="display: none;">
+      <!-- Resultado final -->
+    </div>
+
+    <div id="message-container" class="message-container">
+      <!-- Mensaje final -->
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "¿Dónde nos conocimos?",
+        options: ["En la escuela", "En una fiesta", "En el trabajo", "En un café"],
+        answer: "En la escuela"
+      },
+      {
+        question: "¿Cuál es nuestra comida favorita para cualquier ocasión?",
+        options: ["Pizza", "Tacos", "Sushi", "McDonalds"],
+        answer: "McDonalds"
+      },
+      {
+        question: "Dime una razón por la cual me iría",
+        options: ["Porque no me quieres", "Porque te cansaste de mí", "Porque encontraste a alguien más", "Porque ya no te hago feliz"],
+        answer: "Ninguna"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    // Iniciar el juego mostrando la primera pregunta
+    function startGame() {
+      document.getElementById('welcome-message').style.display = 'none'; // Ocultar el mensaje de bienvenida
+      document.getElementById('start-container').style.display = 'none'; // Ocultar el botón de inicio
+      document.getElementById('quiz').style.display = 'block'; // Mostrar el quiz
+      loadQuestion(); // Cargar la primera pregunta
+    }
+
+    // Cargar la siguiente pregunta
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        const question = questions[currentQuestion];
+        document.getElementById('question-container').textContent = question.question;
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = ''; // Limpiar opciones previas
+        question.options.forEach(option => {
+          const button = document.createElement('button');
+          button.textContent = option;
+          button.classList.add('btn');
+          button.onclick = () => handleAnswer(option);
+          optionsContainer.appendChild(button);
+        });
+      } else {
+        showFinalQuestion();
+      }
+    }
+
+    // Manejar la selección de la respuesta
+    function handleAnswer(option) {
+      const correctAnswer = questions[currentQuestion].answer;
+      if (currentQuestion === 2) {
+        if (option !== "Ninguna") {
+          document.getElementById('quiz').style.display = 'none';
+          document.getElementById('result').textContent = "No mientas, no hay ninguna!!!";
+          document.getElementById('result').style.display = 'block';
+          setTimeout(() => {
+            showFinalQuestion();
+          }, 2000);
+        }
+      } else {
+        if (option === correctAnswer) {
+          score++;
+        }
+        currentQuestion++;
+        loadQuestion();
+      }
+    }
+
+    // Mostrar la pregunta final
+    function showFinalQuestion() {
+      document.getElementById('quiz').style.display = 'none';
+      const finalQuestionContainer = document.getElementById('result');
+      finalQuestionContainer.innerHTML = `
+        <h2>¿Quieres ser mi San Valentín? 💖</h2>
+        <button class="btn" onclick="showMessage()">Sí</button>
+        <button class="btn">No</button>
+      `;
+      finalQuestionContainer.style.display = 'block';
+    }
+
+    // Mostrar el mensaje final sin mostrar la pregunta de San Valentín
+    function showMessage() {
+      document.getElementById('result').style.display = 'none'; // Ocultar la pregunta final
+      document.getElementById('message-container').style.display = 'block'; // Mostrar el mensaje final
+      document.getElementById('message-container').textContent = 
+        "Gracias por ser la mejor compañera que la vida me ha dado. Quiero que seas mi San Valentín por siempre, porque eres lo más hermoso y puro que tengo. Pasaré toda mi vida mostrándotelo, especialmente cuando más lo necesites. Te amo profundamente.";
+    }
+
+  </script>
+
+</body>
+</html>
+
+
+
+
+
